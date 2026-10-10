@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>RailSync | F-02 Feasibility</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="/static/styles.css" />
+		<link rel="stylesheet" href="/static/overrides.css" />
+		<link rel="stylesheet" href="/static/intake.css" />
+	</head>
+	<body>
+		<div class="app-shell intake-shell">
+			<header class="topbar">
+				<a class="brand" href="/"><span class="brand-mark"><i></i><i></i><i></i></span><span>Rail<span>Sync</span></span></a>
+				<nav class="main-nav" aria-label="Primary navigation"><a class="nav-link" href="/">Overview</a><a class="nav-link" href="/intake">Data intake</a><a class="nav-link active" href="/feasibility">Feasibility</a><a class="nav-link" href="/priority">Priority</a><a class="nav-link" href="/planner">Block plan</a><a class="nav-link" href="/operations-data">Operations data</a><a class="nav-link" href="/what-if">What-if</a><a class="nav-link" href="/live-monitor">Live monitor</a><a class="nav-link" href="/cockpit">Cockpit</a></nav>
+				<div class="intake-status"><i></i> Live forecast assessment</div>
+			</header>
+			<main class="intake-main">
+				<section class="intake-intro"><div><p class="eyebrow"><span></span> F-02 · OPERATING-CONDITION FEASIBILITY</p><h1>Check the window<br /><em>before the block.</em></h1><p>Assess a normalized F-01 task against real forecast conditions. The result is a planning recommendation, never an automatic sanction.</p></div><aside><strong>Required input</strong><ol><li>Select a complete task from data intake</li><li>Review the live forecast assessment</li></ol></aside></section>
+				<section class="intake-layout">
+					<section class="form-card"><div class="form-heading"><div><h2>Candidate window assessment</h2><p>Location, proposed time, and safety thresholds are taken from the unified data intake record.</p></div><span class="required-note">Intake values</span></div><form id="assessment-form" novalidate><div class="form-grid"><label class="span-two">Normalized task<select name="task_id" id="task-select" required><option value="" selected disabled>Loading complete F-01 tasks…</option></select></label></div><div class="form-submit"><p>The service queries Open-Meteo for the stored section and proposed hour using fixed Indian Railways safety thresholds.</p><button class="primary-button" type="submit">Assess candidate window <span>→</span></button></div></form></section>
+					<aside class="result-panel"><div class="result-heading"><p class="eyebrow"><span></span> FEASIBILITY RESULT</p><h2>Awaiting assessment</h2><p id="f02-caption">Select a normalized task to review its live forecast assessment.</p></div><div id="f02-result" class="empty-result"><div class="empty-rail"><i></i><i></i></div><p>No weather or safety conclusion is shown until a task is selected.</p></div></aside>
+				</section>
+			</main>
+			<footer><span>RailSync · F-02 operating-condition feasibility</span><span>Forecasts are advisory; controller approval remains required.</span></footer>
+		</div>
+		<script src="/static/feasibility.js"></script>
+	</body>
+</html>

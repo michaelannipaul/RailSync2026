@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RailSync | Automatic Block Planning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/overrides.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#overview" aria-label="RailSync dashboard">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Rail<span>Sync</span></span>
+        </a>
+        <nav class="main-nav" aria-label="Primary navigation">
+          <a class="nav-link active" href="/">Overview</a>
+          <a class="nav-link" href="/intake">Data intake</a>
+          <a class="nav-link" href="/feasibility">Feasibility</a>
+          <a class="nav-link" href="/priority">Priority</a>
+          <a class="nav-link" href="/planner">Block plan</a>
+          <a class="nav-link" href="/operations-data">Operations data</a>
+          <a class="nav-link" href="/what-if">What-if</a>
+          <a class="nav-link" href="/live-monitor">Live monitor</a>
+          <a class="nav-link" href="/cockpit">Cockpit</a>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-button" aria-label="Notifications"><span class="bell"></span><b>3</b></button>
+          <button class="profile" aria-label="Open user menu"><span class="avatar" id="profile-avatar">—</span><span class="profile-copy"><strong>Loading identity...</strong><small>Loading role...</small></span><span class="chevron">⌄</span></button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" id="overview">
+          <div class="hero-copy">
+            <p class="eyebrow"><span></span> DIVISIONAL CONTROL</p>
+            <h1>Plan every block with<br /><em>one clear track ahead.</em></h1>
+            <p class="hero-description">Coordinate Engineering, S&amp;T and Traction work in shared windows—while protecting train operations.</p>
+              <div class="hero-actions">
+                <button class="primary-button" data-route="/planner">Generate weekly plan <span>→</span></button>
+                <button class="text-button" data-route="/what-if">Run what-if scenario <span>↗</span></button>
+            </div>
+          </div>
+          <div class="rail-illustration" aria-label="Illustration of a railway corridor with planned maintenance windows" role="img">
+            <div class="sun"></div><div class="cloud cloud-one"></div><div class="cloud cloud-two"></div>
+            <div class="hills hill-back"></div><div class="hills hill-front"></div>
+            <div class="signal"><span></span><b></b></div>
+            <div class="poles"><i></i><i></i><i></i><i></i></div>
+            <div class="track"><i></i><i></i></div>
+            <div class="train"><span class="train-window"></span><span class="train-window"></span><span class="train-window"></span><b></b></div>
+            <div class="plan-chip chip-one"><span></span> Engineering</div>
+            <div class="plan-chip chip-two"><span></span> S&amp;T</div>
+          </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Key planning indicators">
+          <article class="metric-card"><div class="metric-icon blue">⌁</div><div><p>Planned availability</p><strong id="metric-availability">—<small>%</small></strong><span id="metric-availability-note" class="muted-line">No approved baseline recorded</span></div></article>
+          <article class="metric-card"><div class="metric-icon amber">◒</div><div><p>Shared block hours</p><strong id="metric-hours">—<small> h</small></strong><span class="muted-line">Current stored plan</span></div></article>
+          <article class="metric-card"><div class="metric-icon violet">⊞</div><div><p>Scheduled tasks</p><strong id="metric-tasks">—</strong><span id="metric-unscheduled" class="muted-line">— unscheduled</span></div></article>
+          <article class="metric-card"><div class="metric-icon green">✓</div><div><p>Sanctioned blocks</p><strong id="metric-sanctioned">—</strong><span id="metric-proposed" class="muted-line">— proposed</span></div></article>
+        </section>
+
+        <section class="workspace" id="plan">
+          <div class="section-heading"><div><p class="eyebrow"><span></span> COORDINATED BLOCK PLAN</p><h2>Current stored plan</h2></div><div class="heading-actions"><button class="outline-button" data-route="/planner">Open full plan <span>→</span></button></div></div>
+          <div class="planner-card">
+            <div class="timeline-toolbar"><div><strong id="overview-section-title">Loading registered sections...</strong><span id="overview-route-status" class="route-status"><i></i> Loading stored plan</span></div><div class="legend"><span><i class="eng"></i>Engineering</span><span><i class="st"></i>S&amp;T</span><span><i class="trd"></i>Traction</span></div></div>
+            <div class="timeline-wrap">
+              <div class="time-head"><span>Section</span><div id="overview-time-head"><b>Loading plan horizon...</b></div></div>
+              <div id="overview-timeline-rows"><div class="timeline-row"><div class="route-name"><strong>Loading stored blocks...</strong></div></div></div>
+            </div>
+            <div class="planner-footer"><span id="overview-plan-status"><i class="spark"></i> Loading stored plan...</span><button class="text-button compact" data-route="/what-if">Test a window <span>→</span></button></div>
+          </div>
+        </section>
+
+        <section class="lower-grid">
+          <section class="priority-panel" id="tasks"><div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> PRIORITY QUEUE</p><h2>Needs planning attention</h2></div><button class="text-button compact" data-route="/intake">View all <span>→</span></button></div><div id="overview-task-list" class="task-list"><p class="muted-line">Loading stored tasks...</p></div></section>
+          <aside class="control-panel" id="live"><div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> LIVE CONTROL</p><h2>Stored block state</h2></div><button class="text-button compact" data-route="/live-monitor">Open monitor <span>→</span></button></div><div id="overview-live-state" class="live-block"><p class="muted-line">Live status is available in Live monitor.</p></div></aside>
+        </section>
+      </main>
+      <footer><span>RailSync · Automatic Block Planning</span><span id="overview-data-status">Data status: <i></i> Loading stored records</span></footer>
+    </div>
+    <div class="modal-backdrop" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button class="modal-close" aria-label="Close dialog">×</button><p class="eyebrow"><span></span> PLANNING ASSISTANT</p><h2 id="modal-title">Weekly plan ready for review</h2><p id="modal-body">The optimizer has consolidated compatible work into COA-approved windows. Review operational impact before submitting for sanction.</p><div class="modal-actions"><button class="primary-button">Review proposed plan <span>→</span></button><button class="outline-button modal-cancel">Close</button></div></section></div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>railSYSTEM User Input Test</title>
+    <style>
+        * { box-sizing: border-box; font-family: system-ui, sans-serif; }
+        body { max-width: 900px; margin: 2rem auto; padding: 0 1rem; background: #f0f2f5; }
+        .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 12px #0001; }
+        h1 { color: #1e293b; margin: 0 0 1.5rem 0; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155; }
+        input, select, textarea { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
+        input:focus, select:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: #2563eb; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .btn { background: #2563eb; color: white; border: none; padding: 0.875rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; width: 100%; }
+        .btn:hover { background: #1d4ed8; }
+        #result { margin-top: 2rem; padding: 1.5rem; border-radius: 8px; background: #f8fafc; border-left: 4px solid #2563eb; }
+        .example-notice { background: #fffbeb; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border-left: 4px solid #f59e0b; }
+        .valid { color: #166534; font-weight: 500; }
+        .invalid { color: #dc2626; font-weight: 500; }
+        code { background: #e2e8f0; padding: 0.125rem 0.375rem; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ railSYSTEM Input Test Tool</h1>
+
+        <div class="example-notice">
+            <strong>📌 How to use:</strong> Enter the codes and date below. All validation will run live. <br>
+            Valid station codes: <code>NDLS</code> (Delhi), <code>CSMT</code> (Mumbai), <code>HWH</code> (Howrah), <code>MAS</code> (Chennai), <code>SBC</code> (Bangalore)
+        </div>
+
+        <form id="testForm">
+            <div class="row">
+                <div class="form-group">
+                    <label>🚩 Origin Station Code</label>
+                    <input type="text" id="originCode" placeholder="Example: NDLS" maxlength="4" required>
+                    <small id="originStatus"></small>
+                </div>
+                <div class="form-group">
+                    <label>🎯 Destination Station Code</label>
+                    <input type="text" id="destinationCode" placeholder="Example: CSMT" maxlength="4" required>
+                    <small id="destStatus"></small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>📅 Proposed Journey Date</label>
+                    <input type="date" id="proposedDate" required>
+                    <small id="dateStatus"></small>
+                </div>
+                <div class="form-group">
+                    <label>⏰ Preferred Departure Time</label>
+                    <input type="time" id="departureTime" value="08:00" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🛤️ Train Class</label>
+                <select id="trainClass" required>
+                    <option value="">Select class</option>
+                    <option value="1A">First AC (1A)</option>
+                    <option value="2A">Second AC (2A)</option>
+                    <option value="3A">Third AC (3A)</option>
+                    <option value="SL">Sleeper (SL)</option>
+                    <option value="GN">General (GN)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn">🔍 Test & Validate Input</button>
+        </form>
+
+        <div id="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Valid station codes from actual railSYSTEM database
+        const VALID_STATIONS = {
+            NDLS: 'New Delhi',
+            CSMT: 'Chhatrapati Shivaji Maharaj Terminus',
+            HWH: 'Howrah Junction',
+            MAS: 'Chennai Central',
+            SBC: 'KSR Bengaluru',
+            LKO: 'Lucknow',
+            BCT: 'Mumbai Central',
+            PNBE: 'Patna Junction'
+        };
+
+        const originInput = document.getElementById('originCode');
+        const destInput = document.getElementById('destinationCode');
+        const dateInput = document.getElementById('proposedDate');
+        const resultDiv = document.getElementById('result');
+
+        // Live validation
+        originInput.addEventListener('input', () => validateStation(originInput, 'originStatus'));
+        destInput.addEventListener('input', () => validateStation(destInput, 'destStatus'));
+        dateInput.addEventListener('input', validateDate);
+
+
+        function validateStation(input, statusId) {
+            const status = document.getElementById(statusId);
+            const code = input.value.toUpperCase().trim();
+            input.value = code;
+
+            if (code.length === 0) {
+                status.textContent = '';
+                return false;
+            }
+            if (VALID_STATIONS[code]) {
+                status.className = 'valid';
+                status.textContent = `✅ Valid: ${VALID_STATIONS[code]}`;
+                return true;
+            } else {
+                status.className = 'invalid';
+                status.textContent = '❌ Not found in station list';
+                return false;
+            }
+        }
+
+        function validateDate() {
+            const status = document.getElementById('dateStatus');
+            const selectedDate = new Date(dateInput.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (!dateInput.value) {
+                status.textContent = '';
+                return false;
+            }
+            if (selectedDate < today) {
+                status.className = 'invalid';
+                status.textContent = '❌ Date cannot be in the past';
+                return false;
+            }
+            if (selectedDate > new Date(today.getFullYear(), today.getMonth() + 6, today.getDate())) {
+                status.className = 'invalid';
+                status.textContent = '❌ Cannot book more than 6 months ahead';
+                return false;
+            }
+            status.className = 'valid';
+            status.textContent = `✅ Valid travel date (${selectedDate.toLocaleDateString()})`;
+            return true;
+        }
+
+        document.getElementById('testForm').addEventListener('submit', (ev) => {
+            ev.preventDefault();
+
+            // Final validation before processing
+            const originOk = validateStation(originInput, 'originStatus');
+            const destOk = validateStation(destInput, 'destStatus');
+            const dateOk = validateDate();
+
+            if (!originOk || !destOk || !dateOk) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<h3 style="color:#dc2626">⚠️ Please fix the invalid fields first</h3>';
+                return;
+            }
+
+            // Show parsed user input (this is what your backend would receive)
+            const userInput = {
+                originCode: originInput.value,
+                originName: VALID_STATIONS[originInput.value],
+                destinationCode: destInput.value,
+                destinationName: VALID_STATIONS[destInput.value],
+                proposedDate: dateInput.value,
+                departureTime: document.getElementById('departureTime').value,
+                travelClass: document.getElementById('trainClass').value,
+                processedAt: new Date().toISOString()
+            };
+
+            // Display result
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3 style="margin-top: 0; color: #166534;">✅ Input Test Successful!</h3>
+                <p>This is exactly how the system receives your input. You can now use these values:</p>
+                <pre style="background: #1e293b; color: #f1f5f9; padding: 1rem; border-radius: 6px; overflow-x: auto;">${JSON.stringify(userInput, null, 2)}</pre>
+                <p>✅ You can now use this parsed data for: feasibility checks, train routing, seat availability or planning operations.</p>
+            `;
+        });
+
+        // Set minimum date to today
+        dateInput.min = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html>

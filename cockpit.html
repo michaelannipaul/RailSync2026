@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RailSync | Dispatcher &amp; Planner Operations Cockpit (F-07 &amp; F-08)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/cockpit.css?v=slot-labels-v5" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="cockpit-body">
+  <div class="cockpit-shell">
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="RailSync overview">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Rail<span>Sync</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/">Overview</a>
+        <a class="nav-link" href="/intake">Data intake</a>
+        <a class="nav-link" href="/feasibility">Feasibility</a>
+        <a class="nav-link" href="/priority">Priority</a>
+        <a class="nav-link" href="/planner">Block plan</a>
+        <a class="nav-link" href="/operations-data">Operations data</a>
+        <a class="nav-link" href="/what-if">What-if</a>
+        <a class="nav-link" href="/live-monitor">Live monitor</a>
+        <a class="nav-link active" href="/cockpit">Cockpit</a>
+      </nav>
+      <div class="topbar-actions">
+        <div class="user-role-badge">
+          <span class="role-indicator"></span>
+          <span id="headerRoleDisplay">Awaiting configured identity</span>
+        </div>
+        <button class="outline-button compact" id="openAuditLedgerBtn" title="View regulatory audit trail">
+          📋 Audit ledger
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Operational Cockpit -->
+    <main class="cockpit-main">
+      <!-- Cockpit Header Banner -->
+      <section class="cockpit-banner">
+        <div class="banner-title-area">
+          <p class="eyebrow"><span></span> F-07 &amp; F-08 · DISPATCHER OPERATIONS COCKPIT &amp; REGULATORY CONTROL</p>
+          <h1>Corridor Operations &amp; Sanction Authority</h1>
+          <p class="banner-sub">
+            Human-governed coordinated block review. Inspect multi-department consolidations, verify safety isolations,
+            record sanctions, log overrides, and export sanction-memo drafts.
+          </p>
+        </div>
+        <div class="controller-identity-card">
+          <div class="card-label">Active Human Authority</div>
+          <div class="identity-controls">
+            <div class="control-row">
+              <label for="controllerNameInput">Officer Name:</label>
+              <input type="text" id="controllerNameInput" placeholder="Enter officer name" aria-describedby="authorityIdentityHint" />
+            </div>
+            <div class="control-row">
+              <label for="controllerRoleSelect">Authorized Role:</label>
+              <select id="controllerRoleSelect" aria-describedby="authorityIdentityHint">
+                <option value="" selected disabled>Select an authorized role</option>
+                <option value="Section Controller">Section Controller (Sanctioning Authority)</option>
+                <option value="Chief Controller">Chief Controller (Divisional Head)</option>
+                <option value="Safety Officer">Safety Officer (Reviewer)</option>
+              </select>
+            </div>
+            <small class="identity-hint" id="authorityIdentityHint">Use the configured controller identity for this session.</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="policy-tuning-card" aria-labelledby="policy-tuning-title">
+        <div class="policy-tuning-header">
+          <div>
+            <p class="eyebrow"><span></span> COA ADMINISTRATION</p>
+            <h2 id="policy-tuning-title">Global ML Policy Tuning (COA Admin)</h2>
+            <p>Update the active operational parameters used by explainable priority scoring.</p>
+          </div>
+          <span class="policy-admin-badge">Admin editor</span>
+        </div>
+        <form id="policy-tuning-form" class="policy-tuning-form">
+          <div class="w-full md:col-span-3">
+            <div class="mb-3 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-600">Traffic Density (6-Hour Slots)</div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div class="p-5 border border-gray-200 rounded-lg bg-gray-50/50 shadow-sm">
+                <h3 class="font-bold text-gray-700 text-sm mb-4 uppercase tracking-wider">Passenger</h3>
+                <div class="grid grid-cols-2 gap-5">
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 1: 12:00 AM – 6:00 AM</label>
+                    <input id="policy-passenger-00-06" name="passenger_00_06" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 2: 6:00 AM – 12:00 PM</label>
+                    <input id="policy-passenger-06-12" name="passenger_06_12" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 3: 12:00 PM – 6:00 PM</label>
+                    <input id="policy-passenger-12-18" name="passenger_12_18" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 4: 6:00 PM – 12:00 AM</label>
+                    <input id="policy-passenger-18-24" name="passenger_18_24" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                </div>
+              </div>
+              <div class="p-5 border border-gray-200 rounded-lg bg-gray-50/50 shadow-sm">
+                <h3 class="font-bold text-gray-700 text-sm mb-4 uppercase tracking-wider">Goods</h3>
+                <div class="grid grid-cols-2 gap-5">
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 1: 12:00 AM – 6:00 AM</label>
+                    <input id="policy-goods-00-06" name="goods_00_06" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 2: 6:00 AM – 12:00 PM</label>
+                    <input id="policy-goods-06-12" name="goods_06_12" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 3: 12:00 PM – 6:00 PM</label>
+                    <input id="policy-goods-12-18" name="goods_12_18" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Slot 4: 6:00 PM – 12:00 AM</label>
+                    <input id="policy-goods-18-24" name="goods_18_24" type="number" step="1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-emerald-500 bg-white" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <label>Section traffic (GMT)<input id="policy-section-traffic" name="section_traffic" type="number" min="0" step="0.01" required /></label>
+          <label>Route criticality score<input id="policy-route-criticality" name="route_criticality" type="number" min="0" max="100" step="0.01" required /></label>
+          <label>Weather risk weight (F-02)<input id="policy-weather-weight" name="weather_risk_weight" type="number" min="0" step="0.01" required /></label>
+          <label>Max overdue tolerance (days)<input id="policy-overdue-tolerance" name="max_overdue_tolerance_days" type="number" min="0" step="1" required /></label>
+          <label>TSR penalty score<input id="policy-tsr-penalty" name="tsr_penalty_score" type="number" min="0" max="100" step="1" required /></label>
+          <label>Freight revenue weight<input id="policy-freight-weight" name="freight_revenue_weight" type="number" min="0" step="0.01" required /></label>
+          <label>Policy version<input id="policy-version" name="policy_version" type="text" maxlength="100" required /></label>
+          <button class="policy-update-button" type="submit">Update Policy</button>
+        </form>
+        <p id="policy-tuning-message" class="policy-tuning-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <!-- KPI Deck (Computed strictly from real database records) -->
+      <section class="cockpit-kpis" aria-label="Operations Key Performance Indicators">
+        <article class="kpi-card highlight-kpi">
+          <div class="kpi-icon orange">⚡</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Block Hours Saved</span>
+            <strong class="kpi-val" id="kpiHoursSaved">0.0<small> hrs</small></strong>
+            <span class="kpi-sub" id="kpiHoursSavedSub">Via multi-dept consolidation</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-icon blue">⌁</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Planned Line Availability</span>
+            <strong class="kpi-val" id="kpiAvailability">—</strong>
+            <span class="kpi-sub" id="kpiHoursUsed">0.0 hrs corridor maintenance</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-icon purple">⊞</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Coordinated Blocks</span>
+            <strong class="kpi-val" id="kpiBlockCount">0</strong>
+            <span class="kpi-sub" id="kpiTaskCount">0 maintenance tasks</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-icon green">✓</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Sanction Status Queue</span>
+            <div class="kpi-pill-group" id="kpiSanctionPills">
+              <span class="status-chip chip-proposed"><b id="chipCountProposed">0</b> Proposed</span>
+              <span class="status-chip chip-sanctioned"><b id="chipCountSanctioned">0</b> Sanctioned</span>
+              <span class="status-chip chip-overridden"><b id="chipCountOverridden">0</b> Overridden</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-icon red">⚠</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Deferred / Critical Queue</span>
+            <strong class="kpi-val text-warning" id="kpiDeferredCount">0</strong>
+            <span class="kpi-sub">Constraint-deferred tasks</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- Master Corridor Controls & Filter Bar -->
+      <section class="corridor-toolbar">
+        <div class="toolbar-left">
+          <div class="filter-group">
+            <label for="sectionFilter">Corridor Section:</label>
+            <select id="sectionFilter">
+              <option value="ALL">All Registered Sections</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="statusFilter">Sanction State:</label>
+            <select id="statusFilter">
+              <option value="ALL">All States</option>
+              <option value="PROPOSED">Proposed (Pending Sanction)</option>
+              <option value="SANCTIONED">Sanctioned</option>
+              <option value="OVERRIDDEN">Overridden</option>
+              <option value="REJECTED">Rejected</option>
+              <option value="ACTIVE">Active (Live)</option>
+              <option value="COMPLETED">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <div class="legend-pills">
+            <span class="legend-item"><i class="dot dot-eng"></i> Track (Engineering)</span>
+            <span class="legend-item"><i class="dot dot-st"></i> Signal &amp; Telecom</span>
+            <span class="legend-item"><i class="dot dot-trd"></i> Traction (25kV TRD)</span>
+          </div>
+          <button class="primary-button compact" id="refreshCockpitBtn">↻ Refresh</button>
+          <button class="outline-button compact" id="openWhatIfDrawerBtn">⇄ Test What-If</button>
+        </div>
+      </section>
+
+      <!-- Master Corridor Timeline (Gantt View) -->
+      <section class="corridor-timeline-section" aria-label="Corridor Timeline">
+        <div class="section-title-bar">
+          <h2>Master Corridor Timeline (Gantt)</h2>
+          <span class="live-indicator"><i class="pulse-dot"></i> Live Database Grounded</span>
+        </div>
+
+        <div class="timeline-container" id="timelineContainer">
+          <div class="timeline-empty-state" id="timelineEmptyState">
+            <div class="empty-icon">🚆</div>
+            <h3>No Block Plans Loaded</h3>
+            <p>
+              No proposed or sanctioned block plans were found in the database.
+              Generate a block plan using <a href="/planner">F-04 Block Planner</a> to inspect and sanction coordinated
+              windows in this cockpit.
+            </p>
+          </div>
+          <div class="gantt-board" id="ganttBoard" hidden>
+            <!-- Rows injected dynamically by cockpit.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Deferred / Unscheduled Tasks Notice Table -->
+      <section class="deferred-section" id="deferredSection" hidden>
+        <div class="section-title-bar">
+          <h2>Deferred / Unscheduled Maintenance Work</h2>
+          <span class="badge badge-warning" id="deferredCountBadge">0 Tasks</span>
+        </div>
+        <div class="table-responsive">
+          <table class="cockpit-table" id="deferredTable">
+            <thead>
+              <tr>
+                <th>Task ID</th>
+                <th>Plan ID</th>
+                <th>Exclusion / Deferred Reason</th>
+              </tr>
+            </thead>
+            <tbody id="deferredTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="cockpit-footer">
+      <span>RailSync Automatic Block Planning — F-07 &amp; F-08 Operational System</span>
+      <span>Decision-Support System · Section Controller Sanction Remains Mandatory</span>
+    </footer>
+  </div>
+
+  <!-- F-08: Block Inspection, Human Sanction, Override & Export Modal -->
+  <div class="modal-backdrop" id="blockModalBackdrop" hidden style="display: none">
+    <div class="cockpit-modal" role="dialog" aria-modal="true" aria-labelledby="modalBlockTitle">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow" id="modalBlockEyebrow">BLOCK INSPECTION &amp; SANCTION</span>
+          <h2 id="modalBlockTitle">Block details</h2>
+        </div>
+        <button class="modal-close" id="closeModalBtn" aria-label="Close modal">×</button>
+      </div>
+
+      <div class="modal-content">
+        <!-- Block Core Summary Grid -->
+        <div class="block-summary-grid">
+          <div class="summary-box">
+            <span class="lbl">Railway Section</span>
+            <strong id="mSection">Not loaded</strong>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">Current State</span>
+            <span id="mStateBadge" class="status-badge badge-proposed">PROPOSED</span>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">Scheduled Window</span>
+            <span id="mScheduledWindow" class="mono-txt">Not loaded</span>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">Effective Sanctioned Window</span>
+            <span id="mEffectiveWindow" class="mono-txt highlight-txt">Not loaded</span>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">Window Duration</span>
+            <strong id="mDuration">Not loaded</strong>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">Traffic Block Required</span>
+            <strong id="mTrafficBlock">Not recorded</strong>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">25kV Traction Power Cut</span>
+            <strong id="mTractionDisconnection">Not recorded</strong>
+          </div>
+          <div class="summary-box">
+            <span class="lbl">Train Traffic Impact</span>
+            <span id="mTrainImpact">Not loaded</span>
+          </div>
+        </div>
+
+        <!-- Consolidated Departmental Tasks -->
+        <div class="modal-subheading">Consolidated Departmental Maintenance Tasks</div>
+        <div class="table-responsive">
+          <table class="cockpit-table task-table">
+            <thead>
+              <tr>
+                <th>Task ID</th>
+                <th>Department</th>
+                <th>Maintenance Type</th>
+                <th>Kilometre Range</th>
+                <th>Priority</th>
+                <th>Assigned Slot</th>
+                <th>Feasibility / Data Quality</th>
+              </tr>
+            </thead>
+            <tbody id="mTasksTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- F-07: Priority Factor Contribution Breakdown -->
+        <div class="modal-subheading" id="mPriorityBreakdownHeading" hidden>Priority Score — Factor Contribution Breakdown</div>
+        <div id="mPriorityBreakdown" hidden></div>
+
+        <!-- F-08: Human Authority Action / Override Panel -->
+        <div class="action-panel">
+          <div class="action-panel-heading">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+              <div>
+                <h3>Section Controller Action &amp; Regulatory Override</h3>
+                <p class="panel-desc">
+                  Select an action, choose an operational reason code, and enter mandatory justification notes. All
+                  decisions are immutably logged to the tamper-evident audit ledger.
+                </p>
+              </div>
+              <button type="button" class="outline-button compact" id="modalWhatIfBtn" style="white-space:nowrap;">⇄ Test What-If on this Block</button>
+            </div>
+          </div>
+
+          <div class="action-choice-group">
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="APPROVE" checked />
+              <span class="radio-custom green-radio"></span>
+              <span class="radio-text">
+                <strong>Approve / Sanction Block</strong>
+                <small>Authorize proposed window as scheduled without changes.</small>
+              </span>
+            </label>
+
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="OVERRIDE" />
+              <span class="radio-custom orange-radio"></span>
+              <span class="radio-text">
+                <strong>Override / Shift Window</strong>
+                <small>Adjust scheduled start/end times with regulatory justification.</small>
+              </span>
+            </label>
+
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="REJECT" />
+              <span class="radio-custom red-radio"></span>
+              <span class="radio-text">
+                <strong>Reject Block</strong>
+                <small>Deny block authorization due to traffic or emergency constraints.</small>
+              </span>
+            </label>
+
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="ACTIVATE" />
+              <span class="radio-custom green-radio"></span>
+              <span class="radio-text">
+                <strong>Record Block Active</strong>
+                <small>Record that sanctioned work has started under controller authority.</small>
+              </span>
+            </label>
+
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="EXTEND" />
+              <span class="radio-custom orange-radio"></span>
+              <span class="radio-text">
+                <strong>Request Extension</strong>
+                <small>Record a revised end time with operational justification.</small>
+              </span>
+            </label>
+
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="RESTORE" />
+              <span class="radio-custom green-radio"></span>
+              <span class="radio-text">
+                <strong>Record Restoration</strong>
+                <small>Record that the block has been restored for completion review.</small>
+              </span>
+            </label>
+
+            <label class="action-radio-label">
+              <input type="radio" name="blockActionChoice" value="COMPLETE" />
+              <span class="radio-custom green-radio"></span>
+              <span class="radio-text">
+                <strong>Complete Block</strong>
+                <small>Close a restoration-recorded block in the audit ledger.</small>
+              </span>
+            </label>
+          </div>
+
+          <!-- Override Adjustments (shown only when OVERRIDE is selected) -->
+          <div class="override-inputs-box" id="overrideInputsBox" hidden>
+            <div class="form-row">
+              <div class="form-col">
+                <label for="overrideStartInput">Modified Start Time (UTC):</label>
+                <input type="datetime-local" id="overrideStartInput" />
+              </div>
+              <div class="form-col">
+                <label for="overrideEndInput">Modified End Time (UTC):</label>
+                <input type="datetime-local" id="overrideEndInput" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Regulatory Reason Code & Justification -->
+          <div class="form-row">
+            <div class="form-col">
+              <label for="reasonCodeSelect">Regulatory Reason Code:</label>
+              <select id="reasonCodeSelect">
+                <option value="ROUTINE_SANCTION">ROUTINE_SANCTION — Standard authorized maintenance</option>
+                <option value="WEATHER_ADVISORY">WEATHER_ADVISORY — Fog/Rain/Heat constraint shift</option>
+                <option value="OPERATIONAL_EMERGENCY">OPERATIONAL_EMERGENCY — Urgent track/signal failure</option>
+                <option value="VIP_MOVEMENT">VIP_MOVEMENT — High-priority special passenger path</option>
+                <option value="MACHINE_BREAKDOWN">MACHINE_BREAKDOWN — Track machine maintenance delay</option>
+                <option value="TRAFFIC_CONGESTION">TRAFFIC_CONGESTION — Upstream corridor train backlog</option>
+                <option value="ROLLING_STOCK_DELAY">ROLLING_STOCK_DELAY — Freight/Goods regulation shift</option>
+                <option value="CUSTOM">CUSTOM — Other operational reason (specify in notes)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <label for="justificationNotesInput">
+                Mandatory Controller Justification Notes:
+                <span class="char-count" id="justificationCharCount">(0 chars, min 5 required)</span>
+              </label>
+              <textarea id="justificationNotesInput" rows="3"
+                placeholder="Enter detailed operational rationale for this sanction or override decision..."></textarea>
+            </div>
+          </div>
+
+          <div class="action-submit-bar">
+            <button class="primary-button" id="submitBlockActionBtn">
+              Confirm Decision &amp; Update Audit Ledger
+            </button>
+            <div class="status-msg" id="actionStatusMsg"></div>
+          </div>
+        </div>
+
+        <!-- Formal Reporting & Sanction Memo Export -->
+        <div class="export-panel">
+          <div class="export-desc">
+            <strong>Sanction Memo Draft Export:</strong>
+            <span>Generate a printable draft from recorded block, task, approval and audit data. Railway-authority
+              template approval remains required.</span>
+          </div>
+          <div class="export-actions">
+            <button class="button-secondary" id="exportPdfBtn">
+              📄 Export Vector PDF Memo
+            </button>
+            <button class="button-secondary" id="exportHtmlBtn">
+              🖨 Printable Formal Memo Draft
+            </button>
+            <button class="button-secondary" id="exportJsonBtn">
+              📥 Export Decision JSON
+            </button>
+          </div>
+        </div>
+
+        <!-- Block Audit History Timeline -->
+        <div class="audit-history-box">
+          <h4>Block Decision &amp; Override Audit Trail</h4>
+          <div class="audit-timeline-list" id="blockAuditTimeline">
+            <div class="audit-loading">No audit actions recorded for this block yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="outline-button" id="closeModalFooterBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Audit Ledger Drawer (Tamper-evident append-only view) -->
+  <div class="drawer-backdrop" id="auditDrawerBackdrop" hidden>
+    <div class="cockpit-drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div class="drawer-header">
+        <div>
+          <span class="modal-eyebrow">REGULATORY COMPLIANCE</span>
+          <h2 id="drawerTitle">Append-Only Regulatory Audit Ledger</h2>
+        </div>
+        <button class="modal-close" id="closeAuditDrawerBtn" aria-label="Close drawer">×</button>
+      </div>
+      <div class="drawer-content">
+        <p class="drawer-desc">
+          Tamper-evident chronological log of all controller recommendations, approvals, schedule overrides, and formal
+          sanction decisions.
+        </p>
+        <div class="table-responsive">
+          <table class="cockpit-table audit-ledger-table">
+            <thead>
+              <tr>
+                <th>Timestamp (UTC)</th>
+                <th>Block ID</th>
+                <th>Actor / Role</th>
+                <th>Action</th>
+                <th>Reason Code</th>
+                <th>Justification Notes</th>
+              </tr>
+            </thead>
+            <tbody id="globalAuditTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Embedded What-If Delay Sandbox Drawer -->
+  <div class="drawer-backdrop" id="whatIfDrawerBackdrop" hidden>
+    <div class="cockpit-drawer" role="dialog" aria-modal="true" aria-labelledby="whatIfTitle">
+      <div class="drawer-header">
+        <div>
+          <span class="modal-eyebrow">SANDBOX SIMULATION</span>
+          <h2 id="whatIfTitle">What-If Operational Delay Simulator</h2>
+        </div>
+        <button class="modal-close" id="closeWhatIfDrawerBtn" aria-label="Close drawer">×</button>
+      </div>
+      <div class="drawer-content">
+        <p class="drawer-desc">
+          Test candidate block adjustments against timetable occupancy before confirming sanction authority.
+        </p>
+
+        <!-- Inline error/info banner (replaces alert dialogs) -->
+        <div id="wiErrorBanner" class="wi-error-banner" hidden role="alert" aria-live="polite"></div>
+        <!-- DB data hints -->
+        <details class="wi-hints-details" id="wiHintsDetails">
+          <summary>📋 View available timetable data in database</summary>
+          <div id="wiHintsContent" class="wi-hints-content">Loading…</div>
+        </details>
+
+        <form id="cockpitWhatIfForm" class="what-if-form">
+          <div class="form-row">
+            <div class="form-col">
+              <label for="wiCorridorId">Corridor ID:</label>
+              <input type="text" id="wiCorridorId" required placeholder="Use the stored COA corridor identifier" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label for="wiSectionFrom">Section / Origin Code:</label>
+              <input type="text" id="wiSectionFrom" required />
+            </div>
+            <div class="form-col">
+              <label for="wiSectionTo">Destination Code:</label>
+              <input type="text" id="wiSectionTo" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <label for="wiStartTime">Proposed Start (UTC):</label>
+              <input type="datetime-local" id="wiStartTime" required />
+            </div>
+            <div class="form-col">
+              <label for="wiEndTime">Proposed End (UTC):</label>
+              <input type="datetime-local" id="wiEndTime" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <label for="wiTrainSchedules">Verified Train Schedules JSON (optional):</label>
+              <textarea id="wiTrainSchedules" rows="4" spellcheck="false"
+                placeholder="Leave blank only when timetable schedules are imported. Paste verified TrainSchedule records when aggregate occupancy data is unavailable."></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="primary-button" id="runWiSimBtn">
+            Run Operational Delay Simulation
+          </button>
+        </form>
+
+        <div class="wi-results-area" id="wiResultsArea" hidden>
+          <h4>Estimated Operational Impact</h4>
+          <div class="wi-metrics-grid">
+            <div class="wi-metric-card">
+              <span class="lbl">Passenger Delay</span>
+              <strong id="wiPassDelay">0<small> mins</small></strong>
+            </div>
+            <div class="wi-metric-card">
+              <span class="lbl">Regulated Trains</span>
+              <strong id="wiRegTrains">0</strong>
+            </div>
+            <div class="wi-metric-card">
+              <span class="lbl">Punctuality Impact</span>
+              <strong id="wiPunctuality">0%</strong>
+            </div>
+          </div>
+          <div class="wi-warnings-box" id="wiWarningsBox"></div>
+          <div class="wi-trains-wrap" id="wiTrainsWrap" hidden style="margin-top: 14px;">
+            <h5 style="margin: 0 0 8px; font-size: 0.85rem; color: #1e293b;">Regulated Trains Breakdown</h5>
+            <div class="table-responsive">
+              <table class="cockpit-table" style="font-size: 0.78rem;">
+                <thead>
+                  <tr>
+                    <th>Train</th>
+                    <th>Type</th>
+                    <th>Held At</th>
+                    <th>Delay</th>
+                    <th>Orig Arrival</th>
+                    <th>Sim Arrival</th>
+                  </tr>
+                </thead>
+                <tbody id="wiTrainsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/cockpit.js?v=dept-dispatch-v5"></script>
+</body>
+
+</html>

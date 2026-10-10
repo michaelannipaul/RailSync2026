@@ -1,0 +1,36 @@
+.monitor-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:27px;padding:31px 0}
+.live-alerts-panel{display:flex;flex-direction:column;gap:14px}
+.ws-indicator{font-size:10px;font-weight:700;padding:4px 8px;border-radius:4px;display:inline-block;margin-top:8px}
+.ws-indicator.connected{background:#e6f4ee;color:var(--green)}
+.ws-indicator.connecting{background:#fff3cd;color:#856404}
+.ws-indicator.disconnected{background:#f8f9fa;color:var(--muted)}
+.alerts-feed{flex:1;display:flex;flex-direction:column;gap:10px;max-height:520px;overflow-y:auto;padding-right:4px}
+.feed-item{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.feed-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f8faf9;flex-wrap:wrap}
+.block-id-label{font-size:12px;font-weight:700}
+.feed-state{font-size:9px;font-weight:700;padding:3px 7px;border-radius:3px;text-transform:uppercase}
+.feed-ts{font-size:9px;color:var(--muted);margin-left:auto}
+.state-active{background:#e6f4ee;color:var(--green)}
+.state-overrun{background:#fff3cd;color:#856404}
+.state-early{background:#d1ecf1;color:#0c5460}
+.state-complete{background:#e2e3e5;color:#383d41}
+.state-pending{background:#f8f9fa;color:var(--muted)}
+.progress-bar-wrap{padding:10px 14px 6px;display:flex;align-items:center;gap:12px}
+.progress-label{font-size:10px;color:var(--muted);white-space:nowrap}
+.alert-card{padding:10px 14px;font-size:11px;border-top:2px solid transparent}
+.alert-overrun{border-top-color:#ffc107;background:#fffdf0}
+.alert-early{border-top-color:#17a2b8;background:#f0fbff}
+.alert-badge{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px}
+.alert-overrun .alert-badge{color:#856404}
+.alert-early .alert-badge{color:#0c5460}
+.alert-card dl{display:flex;gap:20px;flex-wrap:wrap;margin-top:8px}
+.alert-card dt{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px}
+.alert-card dd{font-size:11px;font-weight:600;margin:0}
+.raw-alert{font-size:10px;white-space:pre-wrap;padding:10px 14px;margin:0;background:#f8f9fa;color:var(--muted)}
+.telemetry-status{margin-top:12px;font-size:11px;padding:8px 12px;border-radius:6px;display:none}
+.telemetry-status:not(:empty){display:block}
+.status-ok{background:#e6f4ee;color:var(--green)}
+.status-err{background:#fce4e4;color:#c0392b}
+.safeguard-notice{margin:28px 0 8px;padding:14px 18px;border:1px solid #ffc107;border-radius:6px;font-size:11px;color:#856404;background:#fffdf0;line-height:1.6}
+.safeguard-notice strong{display:block;margin-bottom:3px}
+@media(max-width:900px){.monitor-layout{grid-template-columns:1fr}.alerts-feed{max-height:400px}}

@@ -1,0 +1,7 @@
+fastapi==0.115.0
+pydantic==2.9.2
+uvicorn[standard]==0.30.6
+httpx==0.28.1
+networkx==3.2.1
+redis==5.0.1
+reportlab==5.0.1

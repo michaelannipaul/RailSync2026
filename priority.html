@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RailSync | F-03 Priority</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/overrides.css" />
+    <link rel="stylesheet" href="/static/intake.css" />
+    <style>
+      .priority-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem; }
+      .priority-panel { background: #fff; border: 1px solid #dbe3ee; border-radius: 16px; padding: 1.5rem; }
+      .priority-panel h2 { margin-top: 0; }
+      .priority-field { display: grid; gap: .5rem; margin-bottom: 1rem; }
+      .priority-field select { width: 100%; padding: .8rem; border: 1px solid #cbd5e1; border-radius: 10px; }
+      .restriction-field { display: flex; align-items: center; gap: .6rem; padding: .8rem; background: #f8fafc; border-radius: 10px; }
+      .restriction-field input { width: 1.1rem; height: 1.1rem; }
+      .priority-submit { border: 0; border-radius: 10px; padding: .8rem 1rem; background: #155eef; color: #fff; font-weight: 700; cursor: pointer; }
+      .policy-list { display: grid; gap: .6rem; }
+      .policy-item { display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .8rem; background: #f8fafc; border-radius: 8px; }
+      .policy-item span:first-child { color: #475569; }
+      .traffic-slot-card { background: #f8fafc; border: 1px solid #dbe3ee; border-radius: 12px; padding: .9rem; }
+      .traffic-slot-card h3 { margin: 0 0 .75rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #0f172a; }
+      .traffic-slot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+      .traffic-slot-group { display: grid; gap: .5rem; }
+      .traffic-slot-row { display: flex; justify-content: space-between; gap: .75rem; padding: .55rem .7rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; font-size: .82rem; }
+      .traffic-slot-row span:first-child { color: #475569; }
+      .traffic-slot-row span:last-child { font-weight: 700; color: #0f172a; }
+      .policy-wiring-badge { display: inline-block; margin: 0 0 1rem; padding: .35rem .6rem; border-radius: 999px; background: #e6f7f4; color: #0f766e; font-size: .75rem; font-weight: 700; }
+      .result-box { margin-top: 1.25rem; padding: 1rem; background: #f1f7ff; border-radius: 12px; }
+      .result-heading h2 { margin: 0; }
+      .result-heading p { margin: .35rem 0 0; color: #475569; }
+      .result-status { display: inline-block; padding: .3rem .6rem; border-radius: 999px; background: #dcfce7; color: #166534; font-weight: 700; }
+      .review-list { line-height: 1.6; }
+      .empty-result { color: #b91c1c; }
+      @media (max-width: 800px) { .priority-layout { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell intake-shell">
+      <header class="topbar">
+        <a class="brand" href="/"><span class="brand-mark"><i></i><i></i><i></i></span><span>Rail<span>Sync</span></span></a>
+        <nav class="main-nav">
+          <a class="nav-link" href="/">Overview</a><a class="nav-link" href="/intake">Data intake</a><a class="nav-link" href="/feasibility">Feasibility</a><a class="nav-link active" href="/priority">Priority</a><a class="nav-link" href="/planner">Block plan</a><a class="nav-link" href="/operations-data">Operations data</a><a class="nav-link" href="/what-if">What-if</a><a class="nav-link" href="/live-monitor">Live monitor</a><a class="nav-link" href="/cockpit">Cockpit</a>
+        </nav>
+        <div class="intake-status"><i></i> Explainable policy scoring</div>
+      </header>
+      <main class="intake-main">
+        <section class="intake-intro">
+          <div><p class="eyebrow"><span></span> F-03 · CROSS-DEPARTMENT PRIORITIZATION</p><h1>Make priority<br /><em>clear and reviewable.</em></h1><p>Operational parameters are maintained by the COA policy. Select a task, confirm any active restriction, and review the transparent score.</p></div>
+          <aside><strong>Before scoring</strong><ol><li>Complete F-01 ingestion</li><li>Get an eligible F-02 result</li><li>Use the active COA policy</li></ol></aside>
+        </section>
+        <section class="priority-layout">
+          <section class="priority-panel">
+            <h2>Task inputs</h2>
+            <form id="priority-form" novalidate>
+              <div class="priority-field"><label for="priority-task">Eligible task</label><select id="priority-task" name="task_id"><option value="" selected disabled>Select normalized task</option></select></div>
+              <label class="restriction-field" for="restriction-toggle"><input id="restriction-toggle" name="active_restriction" type="checkbox" /> Confirmed active restriction</label>
+              <button class="priority-submit" type="submit">Calculate explainable priority</button>
+            </form>
+            <div class="result-box"><div class="result-heading"><h2>Priority result</h2><p id="priority-caption">Select a task and calculate a score.</p></div><div id="priority-result" class="empty-result"><p>No priority score was generated yet.</p></div></div>
+          </section>
+          <aside class="priority-panel"><h2>COA policy configuration</h2><p class="policy-wiring-badge">F-03 parameters are dynamically wired to F-07/F-08 COA Cockpit.</p><div id="policy-config" class="policy-list" aria-live="polite">
+            <div class="traffic-slot-card">
+              <h3>Traffic Density (6-Hour Slots)</h3>
+              <div class="traffic-slot-grid">
+                <div class="traffic-slot-group">
+                  <div class="traffic-slot-row"><span>Passenger 00–06</span><span id="display-passenger-00-06"></span></div>
+                  <div class="traffic-slot-row"><span>Passenger 06–12</span><span id="display-passenger-06-12"></span></div>
+                  <div class="traffic-slot-row"><span>Passenger 12–18</span><span id="display-passenger-12-18"></span></div>
+                  <div class="traffic-slot-row"><span>Passenger 18–24</span><span id="display-passenger-18-24"></span></div>
+                </div>
+                <div class="traffic-slot-group">
+                  <div class="traffic-slot-row"><span>Goods 00–06</span><span id="display-goods-00-06"></span></div>
+                  <div class="traffic-slot-row"><span>Goods 06–12</span><span id="display-goods-06-12"></span></div>
+                  <div class="traffic-slot-row"><span>Goods 12–18</span><span id="display-goods-12-18"></span></div>
+                  <div class="traffic-slot-row"><span>Goods 18–24</span><span id="display-goods-18-24"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="policy-item"><span>Section traffic (GMT)</span><strong id="display-section-traffic"></strong></div>
+            <div class="policy-item"><span>Route criticality score</span><strong id="display-route-criticality"></strong></div>
+            <div class="policy-item"><span>Weather risk weight (F-02)</span><strong id="display-weather-weight"></strong></div>
+            <div class="policy-item"><span>Max overdue tolerance (days)</span><strong id="display-overdue-tolerance"></strong></div>
+            <div class="policy-item"><span>TSR penalty score</span><strong id="display-tsr-penalty"></strong></div>
+            <div class="policy-item"><span>Freight revenue weight</span><strong id="display-freight-weight"></strong></div>
+            <div class="policy-item"><span>Policy version</span><strong id="display-policy-version"></strong></div>
+          </div></aside>
+        </section>
+      </main>
+    </div>
+    <script src="/static/priority.js"></script>
+  </body>
+</html>

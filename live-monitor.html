@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>RailSync | F-06 Live Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/styles.css"/>
+  <link rel="stylesheet" href="/static/overrides.css"/>
+  <link rel="stylesheet" href="/static/intake.css"/>
+  <link rel="stylesheet" href="/static/live-monitor.css"/>
+</head>
+<body>
+<div class="app-shell intake-shell">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark"><i></i><i></i><i></i></span><span>Rail<span>Sync</span></span></a>
+    <nav class="main-nav">
+      <a class="nav-link" href="/">Overview</a>
+      <a class="nav-link" href="/intake">Data intake</a>
+      <a class="nav-link" href="/feasibility">Feasibility</a>
+      <a class="nav-link" href="/priority">Priority</a>
+      <a class="nav-link" href="/planner">Block plan</a>
+      <a class="nav-link" href="/operations-data">Operations data</a>
+      <a class="nav-link" href="/what-if">What-if</a>
+      <a class="nav-link active" href="/live-monitor">Live monitor</a>
+      <a class="nav-link" href="/cockpit">Cockpit</a>
+    </nav>
+    <div class="intake-status"><i></i> Alerts and recommendations only</div>
+  </header>
+
+  <main class="intake-main">
+    <section class="intake-intro">
+      <div>
+        <p class="eyebrow"><span></span> F-06 &middot; LIVE EXECUTION MONITORING</p>
+        <h1>Monitor blocks<br/><em>as they execute.</em></h1>
+        <p>Receive overrun warnings and early-restoration alerts from authenticated field progress updates. All extension and restoration decisions remain with an authorized controller.</p>
+      </div>
+      <aside>
+        <strong>System safeguard</strong>
+        <ol>
+          <li>Alerts and recommendations only</li>
+          <li>No autonomous block extension</li>
+          <li>No autonomous line restoration</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="monitor-layout">
+
+      <!-- Telemetry input -->
+      <section class="form-card">
+        <div class="form-heading">
+          <div>
+            <h2>Submit progress update</h2>
+            <p>Field supervisors post authenticated progress updates. The engine processes each update and publishes alerts to the live feed.</p>
+          </div>
+          <span class="required-note">Authenticated updates only</span>
+        </div>
+        <form id="telemetry-form" novalidate>
+          <div class="form-grid">
+            <label>Block ID<input name="block_id" type="text" required placeholder="e.g. BLK-100"/></label>
+            <label>Corridor ID<input name="corridor_id" id="corridor-id-input" type="text" required placeholder="e.g. HWH-BWN-CHORD"/></label>
+            <label>Supervisor ID<input name="supervisor_id" type="text" required placeholder="e.g. SUP-1"/></label>
+            <label>Actual progress %
+              <input name="actual_progress_pct" type="number" min="0" max="100" step="0.1" required placeholder="0 – 100"/>
+            </label>
+            <label>Estimated minutes remaining
+              <input name="estimated_minutes_remaining" type="number" min="0" required placeholder="e.g. 45"/>
+            </label>
+            <label class="span-two">Timestamp (defaults to now if blank)
+              <input name="timestamp" type="datetime-local"/>
+            </label>
+          </div>
+          <div class="form-submit">
+            <p>The engine will issue overrun warnings or early-restoration recommendations. No block action is taken automatically.</p>
+            <button class="primary-button" type="submit">Submit update <span>&rarr;</span></button>
+          </div>
+        </form>
+        <div id="telemetry-status" class="telemetry-status"></div>
+      </section>
+
+      <!-- Live alerts panel -->
+      <aside class="live-alerts-panel">
+        <div class="result-heading">
+          <p class="eyebrow"><span></span> LIVE ALERTS FEED</p>
+          <h2 id="ws-heading">Not connected</h2>
+          <p id="ws-caption">Enter a Corridor ID and submit an update to connect to the live feed.</p>
+          <div id="ws-status" class="ws-indicator disconnected">&#9679; Disconnected</div>
+        </div>
+        <div id="alerts-feed" class="alerts-feed">
+          <div class="empty-result">
+            <div class="empty-rail"><i></i><i></i></div>
+            <p>No live alerts. Submit a progress update to start monitoring.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="safeguard-notice">
+      <strong>Control safeguard.</strong> This system issues alerts and recommendations only. It does not autonomously extend a block, restore a line, issue signals, or direct station staff. An authorized controller performs and records every decision.
+    </div>
+  </main>
+
+  <footer>
+    <span>RailSync &middot; F-06 live execution monitoring</span>
+    <span>Alerts are advisory. Authorized controller decision required for all actions.</span>
+  </footer>
+</div>
+<script src="/static/live-monitor.js"></script>
+</body>
+</html>

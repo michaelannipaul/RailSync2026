@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>RailSync | F-05 What-If Simulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/styles.css"/>
+  <link rel="stylesheet" href="/static/overrides.css"/>
+  <link rel="stylesheet" href="/static/intake.css"/>
+  <link rel="stylesheet" href="/static/what-if.css"/>
+</head>
+<body>
+<div class="app-shell intake-shell">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark"><i></i><i></i><i></i></span><span>Rail<span>Sync</span></span></a>
+    <nav class="main-nav">
+      <a class="nav-link" href="/">Overview</a>
+      <a class="nav-link" href="/intake">Data intake</a>
+      <a class="nav-link" href="/feasibility">Feasibility</a>
+      <a class="nav-link" href="/priority">Priority</a>
+      <a class="nav-link" href="/planner">Block plan</a>
+      <a class="nav-link" href="/operations-data">Operations data</a>
+      <a class="nav-link active" href="/what-if">What-if</a>
+      <a class="nav-link" href="/live-monitor">Live monitor</a>
+      <a class="nav-link" href="/cockpit">Cockpit</a>
+    </nav>
+    <div class="intake-status"><i></i> Planning estimates only</div>
+  </header>
+
+  <main class="intake-main">
+    <section class="intake-intro">
+      <div>
+        <p class="eyebrow"><span></span> F-05 &middot; WHAT-IF OPERATIONAL IMPACT</p>
+        <h1>Test a block window<br/><em>before it is sanctioned.</em></h1>
+        <p>Estimate the effect of a proposed block on train operations &mdash; regulated trains, delay minutes, and capacity impact &mdash; using imported timetable data or supplied schedules. Results are planning estimates, not live movement authority.</p>
+      </div>
+      <aside>
+        <strong>What is estimated</strong>
+        <ol>
+          <li>Affected trains and regulated holds</li>
+          <li>Passenger &amp; freight delay minutes</li>
+          <li>Network punctuality impact %</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="whatif-layout">
+      <section class="form-card">
+        <div class="form-heading">
+          <div>
+            <h2>Proposed block parameters</h2>
+            <p>Enter the candidate window. Train schedules are derived from imported timetable records when available; supply override schedules only if you have verified data.</p>
+          </div>
+          <span class="required-note">No sample values</span>
+        </div>
+        <form id="whatif-form" novalidate>
+          <div class="form-grid">
+            <label>Corridor ID<input name="corridor_id" type="text" required placeholder="e.g. HWH-BDC-UP-MAIN"/></label>
+            <label>Section from (station code)<input name="section_from" type="text" required placeholder="e.g. HWH"/></label>
+            <label>Section to (station code)<input name="section_to" type="text" required placeholder="e.g. BDC"/></label>
+            <label>Block start time<input name="block_start_time" type="datetime-local" required/></label>
+            <label class="span-two">Block end time<input name="block_end_time" type="datetime-local" required/></label>
+            <label class="span-two">
+              Train schedules JSON
+              <span class="optional-note">(optional &mdash; leave blank to use imported timetable records)</span>
+              <textarea name="trains" rows="10" spellcheck="false"
+                placeholder="Leave blank to derive schedules from imported timetable-occupancy data.&#10;&#10;To override, paste a JSON array:&#10;[{&quot;train_no&quot;:&quot;12301&quot;,&quot;train_type&quot;:&quot;EXPRESS&quot;,&quot;station_stops&quot;:[{&quot;station_code&quot;:&quot;HWH&quot;,&quot;scheduled_arrival&quot;:&quot;2026-09-07T01:00:00Z&quot;,&quot;scheduled_departure&quot;:&quot;2026-09-07T01:05:00Z&quot;},{&quot;station_code&quot;:&quot;BDC&quot;,&quot;scheduled_arrival&quot;:&quot;2026-09-07T02:15:00Z&quot;,&quot;scheduled_departure&quot;:&quot;2026-09-07T02:20:00Z&quot;}]}]"></textarea>
+            </label>
+          </div>
+          <div class="source-guide">
+            <strong>Train types:</strong> EXPRESS &middot; SUBURBAN &middot; FREIGHT &mdash;
+            Station stops: <code>station_code</code>, <code>scheduled_arrival</code>, <code>scheduled_departure</code> (ISO-8601 with timezone offset).
+          </div>
+          <div class="form-submit">
+            <p>No live control action is taken. Results are for planning review before sanction.</p>
+            <button class="primary-button" type="submit">Run simulation <span>&rarr;</span></button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="result-panel">
+        <div class="result-heading">
+          <p class="eyebrow"><span></span> SIMULATION RESULT</p>
+          <h2 id="sim-heading">Awaiting input</h2>
+          <p id="sim-caption">Submit a proposed block window to estimate operational impact.</p>
+        </div>
+        <div id="sim-result" class="empty-result">
+          <div class="empty-rail"><i></i><i></i></div>
+          <p>No simulation has been run in this session.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="sim-detail" class="sim-detail" hidden>
+      <div class="section-heading compact-heading">
+        <div>
+          <p class="eyebrow"><span></span> REGULATED TRAINS</p>
+          <h2>Impact detail</h2>
+        </div>
+      </div>
+      <div id="sim-trains"></div>
+      <div id="sim-warnings" class="sim-warnings"></div>
+      <p class="sim-disclaimer">
+        <strong>Planning estimate only.</strong> These figures are derived from imported or supplied timetable data and a simplified delay model. They are intended as decision support before a block is submitted for sanction. They are not live movement authority, do not replace control-office operating procedures, and must not be used to grant, extend, or restore a block.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <span>RailSync &middot; F-05 what-if simulation</span>
+    <span>Results are planning estimates. Controller sanction remains required.</span>
+  </footer>
+</div>
+<script src="/static/what-if.js"></script>
+</body>
+</html>

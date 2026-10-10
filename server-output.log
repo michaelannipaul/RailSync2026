@@ -1,0 +1,28 @@
+INFO:     127.0.0.1:59364 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62487 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62487 - "GET /static/styles.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58640 - "GET /static/overrides.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55163 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55163 - "GET /api/v1/cockpit/identity HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58640 - "GET /api/v1/cockpit/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58640 - "GET /intake HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58640 - "GET /static/intake.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55163 - "GET /static/intake.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55163 - "GET /api/v1/ingestion/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55163 - "GET /feasibility HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55163 - "GET /static/feasibility.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55163 - "GET /api/v1/ingestion/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52147 - "POST /api/v1/feasibility/assessments HTTP/1.1" 201 Created
+INFO:     127.0.0.1:52147 - "GET /priority HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52147 - "GET /static/priority.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64671 - "GET /api/policy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52147 - "GET /api/v1/ingestion/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58576 - "POST /calculate-priority HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58576 - "POST /calculate-priority HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49340 - "POST /calculate-priority HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49340 - "POST /calculate-priority HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49340 - "GET /planner HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49340 - "GET /static/planner.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:50385 - "GET /static/planner.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49340 - "GET /api/v1/operations/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50385 - "GET /api/v1/block-plans/eligibility HTTP/1.1" 200 OK

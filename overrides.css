@@ -1,0 +1,46 @@
+.modal-backdrop[hidden] {
+  display: none !important;
+}
+
+.main-nav {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.main-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-link {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.main-nav {
+  gap: 12px;
+  min-width: 0;
+}
+
+.nav-link {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  .topbar {
+    gap: 18px;
+    padding: 0 3%;
+  }
+
+  .intake-status {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .rail-illustration .plan-chip {
+    display: none;
+  }
+}
+

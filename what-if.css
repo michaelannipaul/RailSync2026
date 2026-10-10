@@ -1,0 +1,8 @@
+.whatif-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:27px;padding:31px 0}
+.optional-note{font-size:10px;color:var(--muted);font-weight:400;margin-left:4px}
+.sim-detail{padding:4px 0 44px}
+.sim-warnings{margin-top:14px}
+.sim-disclaimer{margin-top:24px;padding:14px 16px;border:1px solid var(--line);border-radius:6px;font-size:10px;color:var(--muted);line-height:1.6}
+.sim-disclaimer strong{color:var(--text);display:block;margin-bottom:4px}
+.result-status.warn{background:#fff3cd;color:#856404;border:1px solid #ffc107}
+@media(max-width:800px){.whatif-layout{grid-template-columns:1fr}}
